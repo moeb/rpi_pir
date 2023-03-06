@@ -63,3 +63,4 @@ if __name__ == "__main__":
         if countdown == 0 and turned_on:
             subprocess.call(f"sh {DISPLAY_OFF_SCRIPT}", shell=True)
             turned_on = False
+        time.sleep(1)
