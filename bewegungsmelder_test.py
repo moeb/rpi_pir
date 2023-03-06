@@ -26,16 +26,24 @@ def ctrl_c_handler(sig, frame):
     gpio.cleanup()
     sys.exit(0)
 
+def rising_handler(pin):
+    print(datetime.datetime.now().time(), "angegangen")
+
+def falling_handler(pin):
+    print(datetime.datetime.now().time(), "ausgegangen")
+
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, ctrl_c_handler)
+    print("drücke STRG+C um dieses Script zu beenden")
+    
     PIR_PIN = 25    # 22 on the board
     gpio.setmode(gpio.BCM)
     gpio.setup(PIR_PIN, gpio.IN)
 
-    signal.signal(signal.SIGINT, ctrl_c_handler)
-    print("drücke STRG+C um dieses Script zu beenden")
+    # bouncetime verhindert prellen
+    gpio.add_event_detect(PIR_PIN, gpio.FALLING, callback=falling_handler, bouncetime=200)
+    gpio.add_event_detect(PIR_PIN, gpio,RISING, callback=rising_handler, bouncetime=200)
 
     while True:
-        if gpio.input(PIR_PIN):
-            print(datetime.datetime.now().time(), "ausgelöst")
-
+        time.sleep(0.1)
 
