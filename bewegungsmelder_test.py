@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     # bouncetime verhindert prellen
     gpio.add_event_detect(PIR_PIN, gpio.FALLING, callback=falling_handler, bouncetime=200)
-    gpio.add_event_detect(PIR_PIN, gpio,RISING, callback=rising_handler, bouncetime=200)
+    gpio.add_event_detect(PIR_PIN, gpio.RISING, callback=rising_handler, bouncetime=200)
 
     while True:
         time.sleep(0.1)
