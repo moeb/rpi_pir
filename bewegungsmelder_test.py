@@ -27,9 +27,13 @@ def ctrl_c_handler(sig, frame):
     sys.exit(0)
 
 def rising_handler(pin):
+    gpio.remove_event_detect(pin)
+    gpio.add_event_detect(pin, gpio.FALLING, callback=falling_handler, bouncetime=200)
     print(datetime.datetime.now().time(), "angegangen")
 
 def falling_handler(pin):
+    gpio.remove_event_detect(pin)
+    gpio.add_event_detect(pin, gpio.RISING, callback=rising_handler, bouncetime=200)
     print(datetime.datetime.now().time(), "ausgegangen")
 
 if __name__ == "__main__":
@@ -40,9 +44,9 @@ if __name__ == "__main__":
     gpio.setmode(gpio.BCM)
     gpio.setup(PIR_PIN, gpio.IN)
 
-    # bouncetime verhindert prellen
-    gpio.add_event_detect(PIR_PIN, gpio.FALLING, callback=falling_handler, bouncetime=200)
-    gpio.add_event_detect(PIR_PIN, gpio.RISING, callback=rising_handler, bouncetime=200)
+    if gpio.input(PIR_PIN):
+        gpio.add_event_detect(PIR_PIN, gpio.FALLING, callback=falling_handler, bouncetime=200)
+    else: gpio.add_event_detect(PIR_PIN, gpio.RISING, callback=rising_handler, bouncetime=200)
 
     while True:
         time.sleep(0.1)
